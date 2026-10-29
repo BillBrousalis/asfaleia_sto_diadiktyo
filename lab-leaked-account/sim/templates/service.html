@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ svc }}{% endblock %}
+{% block bodyclass %}svc svc-{{ svc }}{% endblock %}
+{% block body %}
+<div id="bar" class="bar" hidden></div>
+<div id="sms" class="sms" hidden></div>
+<main id="app" class="app"></main>
+{% endblock %}
+{% block scripts %}<script>const SVC = {{ svc|tojson }};</script><script src="/static/service.js"></script>{% endblock %}

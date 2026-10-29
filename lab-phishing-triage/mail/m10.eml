@@ -1,0 +1,70 @@
+Received: from mail.meltemi-logistics.example (mail.meltemi-logistics.example
+ [192.0.2.10]) by mx.meltemi-logistics.example (Postfix) with ESMTPS id
+ L10A9X10; Thu, 22 Oct 2026 10:45:00 +0300
+Authentication-Results:
+ mx.meltemi-logistics.example; spf=pass dkim=pass dmarc=pass
+From: =?utf-8?b?zpTOr866z4TPhc6/?= IT <it-network@meltemi-logistics.example>
+To: =?utf-8?b?zpXOu86tzr3OtyDOnM6sz4HOus6/z4U=?=
+ <eleni.markou@meltemi-logistics.example>
+Subject: =?utf-8?b?zpXOoM6VzpnOk86fzp06IM6Rz4DOtc69zrXPgc6zzr/PgM6/zq/Ot8+D?=
+ =?utf-8?b?zrcgz4DOsc67zrnOv8+NIFZQTiDPhM63zr0gzqDOsc+BzrHPg866zrXPhc6u?=
+ 23/10 =?utf-8?b?z4PPhM65z4I=?= 18:00
+Date: Thu, 22 Oct 2026 10:45:00 +0300
+Message-ID:
+ <179319307503.47369.8644100979002213742.1052702@meltemi-logistics.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============1362044185621104126=="
+
+--===============1362044185621104126==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+TWVsdGVtaSBMb2dpc3RpY3MgwrcgzpTOr866z4TPhc6/IElUCgoKzqPPhc69zqzOtM61zrvPhs6/
+zrksCgrOpM6/IM+AzrHOu865z4wgVlBOIM64zrEgzrHPgM61zr3Otc+BzrPOv8+Azr/Ouc63zrjO
+tc6vIM+EzrfOvSDOoM6xz4HOsc+DzrrOtc+Fzq4gMjMvMTAgz4PPhM65z4IgMTg6MDAuIM6Mz4DO
+v865zr/PgiDOtc+BzrPOrM62zrXPhM6xzrkgzrXOviDOsc+Azr/Pg8+EzqzPg861z4nPgiDPgM+B
+zq3PgM61zrkgzr3OsSDOrc+HzrXOuSDOtc6zzrrOsc+EzrHPg8+Ezq7Pg861zrkKz4TOv869IM69
+zq3OvyDPgM61zrvOrM+Ezrcgz4DPgc65zr0gzrHPgM+MIM+Ez4zPhM61LCDOsc67zrvOuc+Oz4Ig
+zrTOtc69IM64zrEgzq3Ph861zrkgz4DPgc+Mz4POss6xz4POtyDPhM63IM6UzrXPhc+Ezq3Pgc6x
+LgoKzp/OtM63zrPOr861z4IgzrrOsc65IM67zq7PiM63IM6xz4DPjCDPhM63zr0gzrXOvc60zr/O
+tc+EzrHOuc+BzrnOus6uIM+DzrXOu86vzrTOsToKaHR0cDovL2ludHJhbmV0Lm1lbHRlbWktbG9n
+aXN0aWNzLmV4YW1wbGUvdnBuIChodHRwOi8vaW50cmFuZXQubWVsdGVtaS1sb2dpc3RpY3MuZXhh
+bXBsZS92cG4pCgrOlM61zr0gzrbOt8+EzrXOr8+EzrHOuSDOus+JzrTOuc66z4zPgiDOvM61IGVt
+YWlsLiDOlyDPg8+Nzr3OtM61z4POtyDOs86vzr3Otc+EzrHOuSDOvM61IM+Ezr/OvSDPg8+Fzr3O
+rs64zrcgzrvOv86zzrHPgc65zrHPg868z4wgz4POsc+CIM+Dz4TOvyDPgM+Bz4zOs8+BzrHOvM68
+zrEuCgrOlM6vzrrPhM+Fzr8gSVQKCgrOlc+Dz4nPhM61z4HOuc66zq4gzrHOvc6xzrrOv86vzr3P
+ic+DzrcuCg==
+
+--===============1362044185621104126==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PCFET0NUWVBFIGh0bWw+PGh0bWwgbGFuZz0iZWwiPjxoZWFkPjxtZXRhIGNoYXJzZXQ9InV0Zi04
+Ij48L2hlYWQ+Cjxib2R5IHN0eWxlPSJtYXJnaW46MDtiYWNrZ3JvdW5kOiNmMmYyZjI7Zm9udC1m
+YW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7Y29sb3I6IzIyMiI+CjxkaXYgc3R5bGU9
+Im1heC13aWR0aDo2MjBweDttYXJnaW46MTZweCBhdXRvO2JhY2tncm91bmQ6I2ZmZjtib3JkZXI6
+MXB4IHNvbGlkICNkZGQ7Ym9yZGVyLXRvcDo1cHggc29saWQgIzJkNmE4ZiI+CjxkaXYgc3R5bGU9
+InBhZGRpbmc6MTRweCAyNHB4O2ZvbnQtc2l6ZToxOHB4O2ZvbnQtd2VpZ2h0OmJvbGQ7Y29sb3I6
+IzJkNmE4ZiI+TWVsdGVtaSBMb2dpc3RpY3MgwrcgzpTOr866z4TPhc6/IElUPC9kaXY+CjxkaXYg
+c3R5bGU9InBhZGRpbmc6MCAyNHB4IDIwcHg7Zm9udC1zaXplOjE0cHg7bGluZS1oZWlnaHQ6MS41
+NSI+CjxwPs6jz4XOvc6szrTOtc67z4bOv865LDwvcD4KPHA+zqTOvyDPgM6xzrvOuc+MIFZQTiDO
+uM6xIM6xz4DOtc69zrXPgc6zzr/PgM6/zrnOt864zrXOryDPhM63zr0gzqDOsc+BzrHPg866zrXP
+hc6uIDIzLzEwIM+Dz4TOuc+CIDE4OjAwLiDOjM+Azr/Ouc6/z4IgzrXPgc6zzqzOts61z4TOsc65
+IM61zr4gzrHPgM6/z4PPhM6sz4POtc+Jz4Igz4DPgc6tz4DOtc65IM69zrEgzq3Ph861zrkgzrXO
+s866zrHPhM6xz4PPhM6uz4POtc65Cs+Ezr/OvSDOvc6tzr8gz4DOtc67zqzPhM63IM+Az4HOuc69
+IM6xz4DPjCDPhM+Mz4TOtSwgzrHOu867zrnPjs+CIM60zrXOvSDOuM6xIM6tz4fOtc65IM+Az4HP
+jM+DzrLOsc+Dzrcgz4TOtyDOlM61z4XPhM6tz4HOsS48L3A+CjxwPs6fzrTOt86zzq/Otc+CIM66
+zrHOuSDOu86uz4jOtyDOsc+Az4wgz4TOt869IM61zr3OtM6/zrXPhM6xzrnPgc65zrrOriDPg861
+zrvOr860zrE6CjxhIGhyZWY9Imh0dHA6Ly9pbnRyYW5ldC5tZWx0ZW1pLWxvZ2lzdGljcy5leGFt
+cGxlL3ZwbiIgc3R5bGU9ImNvbG9yOiMxYTVmYjQiPmh0dHA6Ly9pbnRyYW5ldC5tZWx0ZW1pLWxv
+Z2lzdGljcy5leGFtcGxlL3ZwbjwvYT48L3A+CjxwPs6UzrXOvSDOts63z4TOtc6vz4TOsc65IM66
+z4nOtM65zrrPjM+CIM68zrUgZW1haWwuIM6XIM+Dz43Ovc60zrXPg863IM6zzq/Ovc61z4TOsc65
+IM68zrUgz4TOv869IM+Dz4XOvc6uzrjOtyDOu86/zrPOsc+BzrnOsc+DzrzPjCDPg86xz4Igz4PP
+hM6/IM+Az4HPjM6zz4HOsc68zrzOsS48L3A+CjxwPs6Uzq/Ous+Ez4XOvyBJVDwvcD48L2Rpdj4K
+PGRpdiBzdHlsZT0icGFkZGluZzoxMnB4IDI0cHg7YmFja2dyb3VuZDojZmFmYWZhO2JvcmRlci10
+b3A6MXB4IHNvbGlkICNlZWU7Zm9udC1zaXplOjExcHg7Y29sb3I6Izc3NyI+zpXPg8+Jz4TOtc+B
+zrnOus6uIM6xzr3Osc66zr/Or869z4nPg863LjwvZGl2Pgo8L2Rpdj48L2JvZHk+PC9odG1sPgo=
+
+--===============1362044185621104126==--

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Πρόοδος{% endblock %}
+{% block bodyclass %}page{% endblock %}
+{% block body %}
+<main class="wrap">
+  <h1>Η πρόοδός σου</h1>
+  <div id="mistake" class="mistake" hidden></div>
+  <div id="done" class="done" hidden></div>
+  <p id="status" class="clock"></p>
+  <div class="actions">
+    <button id="finish" class="big">Ολοκλήρωσα</button>
+    <button id="help" class="small-btn">Χρειάζομαι βοήθεια</button>
+    <button id="reset" class="link">Ξεκίνα από την αρχή</button>
+    <a class="link" href="/home">Αρχική οθόνη και βήματα</a>
+  </div>
+  <div id="helpbox" class="card hint" hidden></div>
+  <div id="reportbox" class="card" hidden></div>
+  <h2>Τι έχει συμβεί</h2>
+  <div id="events"></div>
+</main>
+{% endblock %}
+{% block scripts %}<script src="/static/progress.js"></script>{% endblock %}

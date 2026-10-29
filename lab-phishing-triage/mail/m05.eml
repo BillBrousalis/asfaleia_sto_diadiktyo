@@ -1,0 +1,79 @@
+Received: from smtp.freemail-service.example (smtp.freemail-service.example
+ [203.0.113.77]) by mx.meltemi-logistics.example (Postfix) with ESMTPS id
+ L05A9X05; Wed, 21 Oct 2026 07:40:00 +0000
+Authentication-Results:
+ mx.meltemi-logistics.example; spf=softfail dkim=none dmarc=fail
+From: =?utf-8?b?zqXOoM6XzqHOlc6jzpnOkSDOlM6ZzprOkc6jzqTOmc6azqnOnSDOms6bzpc=?=
+ =?utf-8?b?zqPOlc6pzp0=?= <klisi.dikastiki@freemail-service.example>
+To: =?utf-8?b?zpXOu86tzr3OtyDOnM6sz4HOus6/z4U=?=
+ <eleni.markou@meltemi-logistics.example>
+Subject: =?utf-8?b?zpTOmc6azpHOo86kzpnOms6XIM6azpvOl86jzpcg4oCUIM6xz4HOuc64?=
+ =?utf-8?q?=2E?= 3589/2026
+Date: Wed, 21 Oct 2026 07:40:00 +0000
+Message-ID:
+ <179319307502.47369.9932550247650327437.0544397@freemail-service.example>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3347397084932948114=="
+
+--===============3347397084932948114==
+Content-Type: multipart/alternative;
+ boundary="===============8564256033782954654=="
+
+--===============8564256033782954654==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+zpHOoM6fzqbOkc6jzpcgzpTOmc6azpHOo86kzpfOoc6Zzp/OpSDigJQgzpXOoM6VzpnOk86fzp0K
+Cs6azrvOt8+EzrXPjc61z4PPhM61IM69zrEgz4DOsc+Bzr/Phc+DzrnOsc+Dz4TOtc6vz4TOtSDO
+tc69z47PgM65zr/OvSDPhM6/z4UgzrTOuc66zrHPg8+EzrfPgc6vzr/PhS4gzqTOsSDPg8+Ezr/O
+uc+HzrXOr86xIM+EzrfPgiDPhc+Az4zOuM61z4POt8+CIM6yz4HOr8+DzrrOv869z4TOsc65IM+D
+z4TOvyDPg8+Fzr3Ot868zrzOrc69zr8gzq3Os86zz4HOsc+Gzr8uCgrOpM6/IM6xz4HPh861zq/O
+vyDOtc6vzr3Osc65IM66z4HPhc+Az4TOv86zz4HOsc+GzrfOvM6tzr3OvyDOs865zrEgzrvPjM6z
+zr/Phc+CIM+Az4HOv8+Dz4TOsc+Dzq/Osc+CIM+Az4HOv8+Dz4nPgM65zrrPjs69IM60zrXOtM6/
+zrzOrc69z4nOvS4gzprPic60zrnOus+Mz4IgzrHOvc6/zq/Os868zrHPhM6/z4I6IDEyMzQKCs6X
+IM68zrcgzqzOvM61z4POtyDOsc69zqzOs869z4nPg863IM+Dz4XOvc61z4DOrM6zzrXPhM6xzrkg
+z4DPgc+Mz4PPhM65zrzOvyDOus6xzrkgzrHOvc6xzrPOus6xz4PPhM65zrrOriDOtc66z4TOrc67
+zrXPg863Lgo=
+
+--===============8564256033782954654==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PCFET0NUWVBFIGh0bWw+PGh0bWwgbGFuZz0iZWwiPjxoZWFkPjxtZXRhIGNoYXJzZXQ9InV0Zi04
+Ij48L2hlYWQ+Cjxib2R5IHN0eWxlPSJtYXJnaW46MDtiYWNrZ3JvdW5kOiNmMmYyZjI7Zm9udC1m
+YW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7Y29sb3I6IzIyMiI+CjxkaXYgc3R5bGU9
+Im1heC13aWR0aDo2MjBweDttYXJnaW46MTZweCBhdXRvO2JhY2tncm91bmQ6I2ZmZjtib3JkZXI6
+MXB4IHNvbGlkICNkZGQ7Ym9yZGVyLXRvcDo1cHggc29saWQgIzJkNmE4ZiI+CjxkaXYgc3R5bGU9
+InBhZGRpbmc6MTRweCAyNHB4O2ZvbnQtc2l6ZToxOHB4O2ZvbnQtd2VpZ2h0OmJvbGQ7Y29sb3I6
+IzJkNmE4ZiI+PC9kaXY+CjxkaXYgc3R5bGU9InBhZGRpbmc6MCAyNHB4IDIwcHg7Zm9udC1zaXpl
+OjE0cHg7bGluZS1oZWlnaHQ6MS41NSI+CjxwPjxiPs6RzqDOn86mzpHOo86XIM6UzpnOms6RzqPO
+pM6XzqHOmc6fzqUg4oCUIM6VzqDOlc6ZzpPOn86dPC9iPjwvcD4KPHA+zprOu863z4TOtc+NzrXP
+g8+EzrUgzr3OsSDPgM6xz4HOv8+Fz4POuc6xz4PPhM61zq/PhM61IM61zr3Pjs+AzrnOv869IM+E
+zr/PhSDOtM65zrrOsc+Dz4TOt8+Bzq/Ov8+FLiDOpM6xIM+Dz4TOv865z4fOtc6vzrEgz4TOt8+C
+IM+Fz4DPjM64zrXPg863z4IgzrLPgc6vz4POus6/zr3PhM6xzrkgz4PPhM6/IM+Dz4XOvc63zrzO
+vM6tzr3OvyDOrc6zzrPPgc6xz4bOvy48L3A+CjxwPs6kzr8gzrHPgc+HzrXOr86/IM61zq/Ovc6x
+zrkgzrrPgc+Fz4DPhM6/zrPPgc6xz4bOt868zq3Ovc6/IM6zzrnOsSDOu8+MzrPOv8+Fz4Igz4DP
+gc6/z4PPhM6xz4POr86xz4Igz4DPgc6/z4PPic+AzrnOus+Ozr0gzrTOtc60zr/OvM6tzr3Pic69
+LiDOms+JzrTOuc66z4zPgiDOsc69zr/Or86zzrzOsc+Ezr/PgjogPGI+MTIzNDwvYj48L3A+Cjxw
+Ps6XIM68zrcgzqzOvM61z4POtyDOsc69zqzOs869z4nPg863IM+Dz4XOvc61z4DOrM6zzrXPhM6x
+zrkgz4DPgc+Mz4PPhM65zrzOvyDOus6xzrkgzrHOvc6xzrPOus6xz4PPhM65zrrOriDOtc66z4TO
+rc67zrXPg863LjwvcD48L2Rpdj4KPGRpdiBzdHlsZT0icGFkZGluZzoxMnB4IDI0cHg7YmFja2dy
+b3VuZDojZmFmYWZhO2JvcmRlci10b3A6MXB4IHNvbGlkICNlZWU7Zm9udC1zaXplOjExcHg7Y29s
+b3I6Izc3NyI+PC9kaXY+CjwvZGl2PjwvYm9keT48L2h0bWw+Cg==
+
+--===============8564256033782954654==--
+
+--===============3347397084932948114==
+Content-Type: application/zip
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*=utf-8''%CE%9A%CE%9B%CE%97%CE%A3%CE%97-3589.pdf.zip
+MIME-Version: 1.0
+
+UEsDBBQAAAAIAGd5XF1GVNlnZgAAAI0AAAAKAAAAUkVBRE1FLnR4dB2MywmAMBiD707xT+CMiq+L
+CoJrqJRapKJ0g2QlU08JeXxYWHNAwIFkkpsVHCJOBHZs5W4kTqpYw8OxUXjJa8+uNKw6vaZXHkRs
+PyyaQLMg+e4MuwaqnQiPGD+Wo2FT4HPBHqksPlBLAQIUAxQAAAAIAGd5XF1GVNlnZgAAAI0AAAAK
+AAAAAAAAAAAAAACAAQAAAABSRUFETUUudHh0UEsFBgAAAAABAAEAOAAAAI4AAAAAAA==
+
+--===============3347397084932948114==--

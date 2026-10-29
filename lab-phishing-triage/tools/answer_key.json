@@ -1,0 +1,28 @@
+{
+  "malicious": [
+    "m02",
+    "m03",
+    "m05",
+    "m06",
+    "m08",
+    "m09",
+    "m11",
+    "m12"
+  ],
+  "legit": [
+    "m01",
+    "m04",
+    "m07",
+    "m10"
+  ],
+  "F1": "CADMUS{bd638a3aab81235a49f3d3b000d6e6eb}",
+  "F2": "nikos.rigas@meltemi-logistics.example",
+  "F3": "no-reply@e1ara-bank.example",
+  "F4": "verify-id",
+  "F5": "zip",
+  "F6": "350",
+  "F7": "my.meltemi-logistics.example",
+  "F8": "kykladiko-shop.example",
+  "F9": "sms",
+  "F10": "iban"
+}

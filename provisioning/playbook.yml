@@ -1,0 +1,603 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Cadmus Course — the three labs on ONE lab server
+#    Lab A  Αναγνώριση spam και phishing emails            (Roundcube + Dovecot + Postfix + Flask :8080)
+#    Lab B  Ασφάλιση λογαριασμών μετά από διαρροή κωδικού  (Flask :8091)
+#    Lab C  Προστασία και ανάκτηση αρχείων από ransomware  (Flask :8092)
+#
+#  VM1: Student machine (GUI + Firefox). Resolves every simulated name to VM2 through /etc/hosts.
+#  VM2: Lab server. Apache listens on :80 and routes by name (name-based virtual hosts):
+#        the IP address                      -> hub page that lists the three labs
+#        phishing.cadmus-labs.example        -> lab A start screen / progress, plus A's simulated websites
+#        accounts.cadmus-labs.example        -> lab B start screen / progress, plus B's simulated services
+#        ransomware.cadmus-labs.example      -> lab C start screen / progress, plus C's simulated computer
+#        mail.meltemi-logistics.example      -> Roundcube (lab A)
+#  The player opens http://<VM2 IP>/ in Firefox and picks the lab.
+# ─────────────────────────────────────────────────────────────────────────────
+
+- name: VM1 Initialization
+  hosts:
+    - vm1
+  become: true
+  vars:
+    lab_hosts: >-
+      {{ lookup('file', '../lab-phishing-triage/sim/hosts.txt').splitlines()
+         + lookup('file', '../lab-leaked-account/sim/hosts.txt').splitlines()
+         + lookup('file', '../lab-ransomware-friday/sim/hosts.txt').splitlines()
+         + lookup('file', '../hub/hosts.txt').splitlines()
+         + ['mail.meltemi-logistics.example'] }}
+
+  tasks:
+    - name: Install tools
+      ansible.builtin.apt:
+        name:
+          - firefox
+          - chromium
+          - curl
+        state: present
+        update_cache: 'yes'
+
+    - name: Map every simulated name to the lab server
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: "\\s{{ item }}$"
+        line: "192.168.10.20 {{ item }}"
+      loop: "{{ lab_hosts }}"
+
+  roles:
+    - role: user-access
+      user_access_username: user
+      user_access_password: Password123
+      user_access_sudo: true
+
+# ─────────────────────────────────────────────
+#  VM2 — Lab server
+# ─────────────────────────────────────────────
+- name: VM2 Initialization
+  hosts:
+    - vm2
+  become: true
+  vars:
+    lab_a_domain: meltemi-logistics.example
+    lab_a_user: eleni.markou
+    lab_a_pass: cadmus2026
+    lab_a_maildir: "/var/mail/vhosts/meltemi-logistics.example/eleni.markou"
+    sim_hosts: "{{ lookup('file', '../lab-phishing-triage/sim/hosts.txt').splitlines() }}"
+    flask_labs:
+      - { name: lab-leaked-account,    src: lab-leaked-account,    port: 8091, start_host: accounts.cadmus-labs.example,   vhost: 003-accounts,   title: "Lab B" }
+      - { name: lab-ransomware-friday, src: lab-ransomware-friday, port: 8092, start_host: ransomware.cadmus-labs.example, vhost: 004-ransomware, title: "Lab C" }
+    lab_a_manifest: "{{ lookup('file', '../lab-phishing-triage/init/mail-manifest.json') | from_json }}"
+
+  tasks:
+    - name: "[mail] Install mail server and webmail packages"
+      ansible.builtin.apt:
+        name:
+          - postfix
+          - dovecot-core
+          - dovecot-imapd
+          - apache2
+          - libapache2-mod-php
+          - php
+          - php-sqlite3
+          - php-mbstring
+          - php-xml
+          - php-intl
+          - php-zip
+          - php-curl
+          - roundcube
+          - roundcube-sqlite3
+        state: present
+        update_cache: 'yes'
+
+    - name: "[mail] Create vmail group"
+      ansible.builtin.group:
+        name: vmail
+        gid: 5000
+        state: present
+
+    - name: "[mail] Create vmail user"
+      ansible.builtin.user:
+        name: vmail
+        uid: 5000
+        group: vmail
+        shell: /sbin/nologin
+        create_home: false
+        state: present
+
+    - name: "[mail] Deploy Dovecot config"
+      ansible.builtin.copy:
+        dest: /etc/dovecot/dovecot.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          protocols = imap
+          log_path = /var/log/dovecot.log
+          mail_location = maildir:/var/mail/vhosts/%d/%n
+          mail_uid = vmail
+          mail_gid = vmail
+          first_valid_uid = 5000
+          last_valid_uid = 5000
+          auth_mechanisms = plain login
+          auth_username_format = %u
+
+          passdb {
+            driver = passwd-file
+            args = scheme=SHA512-CRYPT username_format=%u /etc/dovecot/passwd
+          }
+
+          userdb {
+            driver = passwd-file
+            args = username_format=%u /etc/dovecot/passwd
+            default_fields = uid=vmail gid=vmail home=/var/mail/vhosts/%d/%n
+          }
+
+          service imap-login {
+            inet_listener imap {
+              address = 127.0.0.1
+              port = 143
+            }
+          }
+
+          ssl = no
+
+    - name: "[mail] Ensure Dovecot passwd file exists"
+      ansible.builtin.file:
+        path: /etc/dovecot/passwd
+        state: touch
+        owner: root
+        group: dovecot
+        mode: '0640'
+        modification_time: preserve
+        access_time: preserve
+
+    - name: "[mail] Deploy Postfix main.cf (local only)"
+      ansible.builtin.copy:
+        dest: /etc/postfix/main.cf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          myhostname = mail.meltemi-logistics.example
+          mydomain = meltemi-logistics.example
+          myorigin = $mydomain
+          inet_interfaces = loopback-only
+          mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+          home_mailbox = Maildir/
+          biff = no
+          append_dot_mydomain = no
+          readme_directory = no
+
+    - name: "[mail] Deploy Roundcube config"
+      ansible.builtin.copy:
+        dest: /etc/roundcube/config.inc.php
+        owner: root
+        group: www-data
+        mode: '0640'
+        content: |
+          <?php
+          $config = [];
+          $config['imap_host'] = '127.0.0.1:143';
+          $config['default_host'] = '127.0.0.1';
+          $config['default_port'] = 143;
+          $config['imap_conn_options'] = ['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]];
+          $config['smtp_host'] = '127.0.0.1:25';
+          $config['smtp_user'] = '';
+          $config['smtp_pass'] = '';
+          $config['product_name'] = 'Webmail';
+          $config['support_url'] = '';
+          $config['skin'] = 'elastic';
+          $config['enable_installer'] = false;
+          $config['des_key'] = 'cadmus_lab_secret_key_24';
+          $config['db_dsnw'] = 'sqlite:////var/roundcube/db/roundcube.db';
+          // Lab settings
+          $config['language'] = 'el_GR';
+          $config['message_show_email'] = true;
+          $config['plugins'] = ['cadmus_report'];
+          $config['dont_override'] = ['message_show_email', 'language'];
+
+    - name: "[mail] Create Roundcube SQLite db directory"
+      ansible.builtin.file:
+        path: /var/roundcube/db
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: "[mail] Initialise Roundcube database"
+      ansible.builtin.command:
+        cmd: php /var/lib/roundcube/bin/initdb.sh --dir=/var/lib/roundcube/SQL
+        creates: /var/roundcube/db/roundcube.db
+      ignore_errors: true
+
+    - name: "[mail] Deploy Apache virtualhost for Roundcube"
+      ansible.builtin.copy:
+        dest: /etc/apache2/sites-available/001-mail.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          <VirtualHost *:80>
+              ServerName mail.meltemi-logistics.example
+              DocumentRoot /var/lib/roundcube/public_html
+              <Directory /var/lib/roundcube/public_html>
+                  Options -Indexes
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+              ErrorLog ${APACHE_LOG_DIR}/roundcube_error.log
+              CustomLog ${APACHE_LOG_DIR}/roundcube_access.log combined
+          </VirtualHost>
+
+    - name: "[mail] Disable default Apache site"
+      ansible.builtin.command: a2dissite 000-default
+      ignore_errors: true
+
+    - name: "[mail] Enable the Roundcube site (mail.meltemi-logistics.example)"
+      ansible.builtin.command: a2ensite 001-mail
+
+    # ── Hub: the default virtual host (the IP address) lists the three labs ─────
+    - name: "[hub] Create the hub directory"
+      ansible.builtin.file:
+        path: /var/www/hub
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: "[hub] Deploy the hub page"
+      ansible.builtin.copy:
+        src: "../hub/index.html"
+        dest: /var/www/hub/index.html
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: "[hub] Apache virtualhost for the hub (000- sorts first, so it is the default vhost)"
+      ansible.builtin.copy:
+        dest: /etc/apache2/sites-available/000-hub.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          <VirtualHost *:80>
+              DocumentRoot /var/www/hub
+              <Directory /var/www/hub>
+                  Options -Indexes
+                  Require all granted
+              </Directory>
+          </VirtualHost>
+
+    - name: "[hub] Enable the hub vhost"
+      ansible.builtin.command: a2ensite 000-hub
+
+    - name: "[mail] Enable Apache rewrite module"
+      community.general.apache2_module:
+        name: rewrite
+        state: present
+
+    - name: "[mail] Enable Apache proxy modules"
+      community.general.apache2_module:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - proxy
+        - proxy_http
+
+    - name: "[mail] Enable Apache PHP 8.3 module"
+      community.general.apache2_module:
+        name: php8.3
+        identifier: php_module
+        state: present
+
+    # ── Roundcube plugin: "Αναφορά" button ───────────────────────────────────
+    - name: "[plugin] Create plugin directories"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+      loop:
+        - /var/lib/roundcube/plugins/cadmus_report
+        - /var/lib/roundcube/plugins/cadmus_report/localization
+
+    - name: "[plugin] Deploy plugin files"
+      ansible.builtin.copy:
+        src: "../lab-phishing-triage/roundcube-plugin/cadmus_report/{{ item }}"
+        dest: "/var/lib/roundcube/plugins/cadmus_report/{{ item }}"
+        owner: root
+        group: root
+        mode: '0644'
+      loop:
+        - cadmus_report.php
+        - cadmus_report.js
+        - cadmus_report.css
+        - outcome.js
+        - localization/el_GR.inc
+        - localization/en_US.inc
+
+    # ── Simulation (Flask) ───────────────────────────────────────────────────
+    - name: "[sim] Install Python and venv"
+      ansible.builtin.apt:
+        name:
+          - python3
+          - python3-venv
+          - python3-pip
+        state: present
+
+    - name: "[sim] Create app directories"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+      loop:
+        - /opt/lab-phishing
+        - /opt/lab-phishing/templates
+        - /opt/lab-phishing/static
+
+    - name: "[sim] Create Python virtual environment"
+      ansible.builtin.command:
+        cmd: python3 -m venv /opt/lab-phishing/venv
+        creates: /opt/lab-phishing/venv
+
+    - name: "[sim] Install Flask in virtual environment"
+      ansible.builtin.pip:
+        name: flask
+        virtualenv: /opt/lab-phishing/venv
+
+    - name: "[sim] Deploy app and scenario data"
+      ansible.builtin.copy:
+        src: "../lab-phishing-triage/sim/{{ item }}"
+        dest: "/opt/lab-phishing/{{ item }}"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+      loop:
+        - app.py
+        - scenarios.json
+        - templates/base.html
+        - templates/start.html
+        - templates/status.html
+        - templates/site.html
+        - static/style.css
+        - static/outcome.js
+        - static/status.js
+
+    - name: "[sim] Deploy systemd service"
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/lab-phishing.service
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [Unit]
+          Description=Cadmus Lab A — simulation server
+          After=network.target
+
+          [Service]
+          User=ubuntu
+          WorkingDirectory=/opt/lab-phishing
+          ExecStart=/opt/lab-phishing/venv/bin/python app.py
+          Restart=always
+          RestartSec=3
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: "[sim] Enable and start Flask service"
+      ansible.builtin.systemd:
+        name: lab-phishing
+        daemon_reload: true
+        state: restarted
+        enabled: true
+
+    - name: "[lab A] Apache vhost for the start screen and simulated websites (proxied to Flask, Host header preserved)"
+      ansible.builtin.copy:
+        dest: /etc/apache2/sites-available/002-phishing.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          <VirtualHost *:80>
+              ServerName phishing.cadmus-labs.example
+              {% for h in sim_hosts %}
+              ServerAlias {{ h }}
+              {% endfor %}
+              ProxyPreserveHost On
+              ProxyPass / http://127.0.0.1:8080/
+              ProxyPassReverse / http://127.0.0.1:8080/
+          </VirtualHost>
+
+    - name: "[lab A] Enable the lab A vhost"
+      ansible.builtin.command: a2ensite 002-phishing
+
+    # ── Labs B and C: one Flask app each, on a local port, behind Apache ────────
+    - name: "[labs B, C] Create app directories"
+      ansible.builtin.file:
+        path: "/opt/{{ item.name }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[labs B, C] Create Python virtual environments"
+      ansible.builtin.command:
+        cmd: "python3 -m venv /opt/{{ item.name }}/venv"
+        creates: "/opt/{{ item.name }}/venv"
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[labs B, C] Install Flask in the virtual environments"
+      ansible.builtin.pip:
+        name: flask
+        virtualenv: "/opt/{{ item.name }}/venv"
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[labs B, C] Deploy the apps (app.py, templates, static)"
+      ansible.builtin.copy:
+        src: "../{{ item.src }}/sim/"
+        dest: "/opt/{{ item.name }}/"
+        owner: ubuntu
+        group: ubuntu
+        mode: preserve
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[labs B, C] Deploy the systemd services"
+      ansible.builtin.copy:
+        dest: "/etc/systemd/system/{{ item.name }}.service"
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [Unit]
+          Description=Cadmus {{ item.title }} — simulated world
+          After=network.target
+
+          [Service]
+          User=ubuntu
+          WorkingDirectory=/opt/{{ item.name }}
+          Environment=PORT={{ item.port }}
+          ExecStart=/opt/{{ item.name }}/venv/bin/python app.py
+          Restart=always
+          RestartSec=3
+
+          [Install]
+          WantedBy=multi-user.target
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[labs B, C] Enable and start the services"
+      ansible.builtin.systemd:
+        name: "{{ item.name }}"
+        daemon_reload: true
+        state: restarted
+        enabled: true
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[labs B, C] Apache vhosts (start screen + simulated names, proxied to Flask, Host header preserved)"
+      ansible.builtin.copy:
+        dest: "/etc/apache2/sites-available/{{ item.vhost }}.conf"
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          <VirtualHost *:80>
+              ServerName {{ item.start_host }}
+              {% for h in lookup('file', '../' + item.src + '/sim/hosts.txt').splitlines() %}
+              ServerAlias {{ h }}
+              {% endfor %}
+              ProxyPreserveHost On
+              ProxyPass / http://127.0.0.1:{{ item.port }}/
+              ProxyPassReverse / http://127.0.0.1:{{ item.port }}/
+          </VirtualHost>
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.vhost }}"
+
+    - name: "[labs B, C] Enable the vhosts"
+      ansible.builtin.command: "a2ensite {{ item.vhost }}"
+      loop: "{{ flask_labs }}"
+      loop_control:
+        label: "{{ item.vhost }}"
+
+    - name: "[lab A] Create maildir structure"
+      ansible.builtin.file:
+        path: "{{ lab_a_maildir }}/{{ item }}"
+        state: directory
+        owner: vmail
+        group: vmail
+        mode: '0700'
+      loop:
+        - new
+        - cur
+        - tmp
+
+    - name: "[lab A] Make parent vhost directories owned by vmail"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: vmail
+        group: vmail
+        mode: '0700'
+      loop:
+        - /var/mail/vhosts
+        - "/var/mail/vhosts/{{ lab_a_domain }}"
+
+    - name: "[lab A] Generate Dovecot password hash"
+      ansible.builtin.command:
+        cmd: "doveadm pw -s SHA512-CRYPT -p {{ lab_a_pass }}"
+      register: lab_a_hash
+      changed_when: false
+      no_log: true
+
+    - name: "[lab A] Register the mailbox in the Dovecot passwd file"
+      ansible.builtin.lineinfile:
+        path: /etc/dovecot/passwd
+        regexp: "^{{ lab_a_user }}@{{ lab_a_domain }}:"
+        line: "{{ lab_a_user }}@{{ lab_a_domain }}:{{ lab_a_hash.stdout }}:5000:5000::{{ lab_a_maildir }}::"
+        owner: root
+        group: dovecot
+        mode: '0640'
+
+    - name: "[lab A] Deliver the 12 emails into the inbox (oldest first)"
+      ansible.builtin.copy:
+        src: "../lab-phishing-triage/mail/{{ item.src }}"
+        dest: "{{ lab_a_maildir }}/new/{{ item.name }}"
+        owner: vmail
+        group: vmail
+        mode: '0600'
+      loop: "{{ lab_a_manifest }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[lab A] Set arrival time of each email to its Date header"
+      ansible.builtin.file:
+        path: "{{ lab_a_maildir }}/new/{{ item.name }}"
+        state: file
+        modification_time: "{{ item.mtime }}"
+        modification_time_format: "%Y%m%d%H%M.%S"
+      loop: "{{ lab_a_manifest }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "[lab A] Enable and restart Dovecot"
+      ansible.builtin.service:
+        name: dovecot
+        state: restarted
+        enabled: true
+
+    - name: "[lab A] Verify Dovecot login for the lab mailbox"
+      ansible.builtin.command: "doveadm auth test {{ lab_a_user }}@{{ lab_a_domain }} {{ lab_a_pass }}"
+      changed_when: false
+      no_log: true
+
+    - name: "[lab A] Enable and restart Postfix"
+      ansible.builtin.service:
+        name: postfix
+        state: restarted
+        enabled: true
+
+    - name: "[lab A] Enable and reload Apache2"
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+        enabled: true
+
+  roles:
+    - role: user-access
+      user_access_username: user
+      user_access_password: Password123
+      user_access_sudo: true

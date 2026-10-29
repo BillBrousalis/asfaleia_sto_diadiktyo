@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Πρόοδος{% endblock %}
+{% block body %}
+<main class="board">
+  <p class="small"><a href="/home">Αρχική οθόνη και βήματα</a></p>
+  <h1>Η πρόοδός σου</h1>
+  <p class="lead">Εδώ βλέπεις τι έχεις κάνει σε κάθε μήνυμα. Η σελίδα ενημερώνεται μόνη της.</p>
+  <div id="restart" class="card restart" hidden></div>
+  <div id="done" class="done" hidden></div>
+  <div id="rows"></div>
+  <p id="count" class="small"></p>
+</main>
+<div id="modal" class="modal" hidden><div class="modal-body"><button id="close" class="close" aria-label="Κλείσιμο">✕</button><div id="modal-content"></div></div></div>
+{% endblock %}
+{% block scripts %}<script src="/static/status.js"></script>{% endblock %}

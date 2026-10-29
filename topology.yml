@@ -1,0 +1,45 @@
+name: cadmus-labs
+hosts:
+  - name: vm1
+    flavor: c2_r4_d40
+    base_box:
+      image: xubuntu-noble-x86_64
+      mgmt_user: ubuntu
+      mgmt_protocol: ssh
+    hidden: false
+  - name: vm2
+    flavor: c2_r4_d40
+    base_box:
+      image: ubuntu-noble-x86_64
+      mgmt_user: ubuntu
+      mgmt_protocol: ssh
+    hidden: false
+routers:
+  - name: router
+    flavor: standard.small
+    base_box:
+      image: ubuntu-noble-x86_64
+      mgmt_user: ubuntu
+      mgmt_protocol: ssh
+    hidden: false
+networks:
+  - name: lan
+    cidr: 192.168.10.0/24
+    accessible_by_user: true
+    hidden: false
+wan:
+  name: internet-connection
+  cidr: 10.10.10.0/24
+net_mappings:
+  - host: vm1
+    network: lan
+    ip: 192.168.10.10
+  - host: vm2
+    network: lan
+    ip: 192.168.10.20
+router_mappings:
+  - router: router
+    network: lan
+    ip: 192.168.10.1
+
+groups: []

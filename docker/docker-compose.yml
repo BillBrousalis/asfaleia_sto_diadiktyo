@@ -1,0 +1,68 @@
+# Local replica of the platform topology for the three labs on ONE lab server (platform: 192.168.10.0/24, here 192.168.13.0/24).
+#   vm2  192.168.13.20  hub (:80) + all three labs (name-based virtual hosts)
+#   vm1  192.168.13.10  Firefox in the browser, resolves every simulated name to vm2
+# Student view:  http://localhost:3030   (Firefox, opens the hub page)
+# Run from this folder:  docker compose up -d --build
+name: cadmus-labs
+
+x-sites: &sites
+  - "mail.meltemi-logistics.example:192.168.13.20"
+  - "elara-bank.example.verify-id.example:192.168.13.20"
+  - "meltemi-mail-upgrade.sites-hosting.example:192.168.13.20"
+  - "donation-claims.fundacion-donaciones.example:192.168.13.20"
+  - "pay-parcel.delivery-fee.example:192.168.13.20"
+  - "refund-portal.state-services.example:192.168.13.20"
+  - "paynest.account-review.example:192.168.13.20"
+  - "e1ara-bank.example:192.168.13.20"
+  - "www.elara-bank.example:192.168.13.20"
+  - "www.kykladiko-shop.example:192.168.13.20"
+  - "intranet.meltemi-logistics.example:192.168.13.20"
+  - "my.meltemi-logistics.example:192.168.13.20"
+  - "mail.aigaio-mail.example:192.168.13.20"
+  - "shop.kyklades-store.example:192.168.13.20"
+  - "www.sinomilia.example:192.168.13.20"
+  - "ebanking.elara-bank.example:192.168.13.20"
+  - "vault.passkeeper.example:192.168.13.20"
+  - "breachcheck.example:192.168.13.20"
+  - "pc.protefs-office.example:192.168.13.20"
+  - "phishing.cadmus-labs.example:192.168.13.20"
+  - "accounts.cadmus-labs.example:192.168.13.20"
+  - "ransomware.cadmus-labs.example:192.168.13.20"
+
+services:
+  vm2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: cadmus-labs-server
+    ports:
+      - "8110:80"
+    networks:
+      lab:
+        ipv4_address: 192.168.13.20
+
+  vm1:
+    image: lscr.io/linuxserver/firefox:latest
+    depends_on: [vm2]
+    shm_size: "1gb"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Athens
+      # fixed 16:9 screen: the image starts at 1024x768 (4:3) and the browser then rescales it badly
+      - SELKIES_IS_MANUAL_RESOLUTION_MODE=true
+      - SELKIES_MANUAL_WIDTH=1600
+      - SELKIES_MANUAL_HEIGHT=900
+      - FIREFOX_CLI=http://192.168.13.20/
+    extra_hosts: *sites
+    ports:
+      - "3030:3000"
+    networks:
+      lab:
+        ipv4_address: 192.168.13.10
+
+networks:
+  lab:
+    ipam:
+      config:
+        - subnet: 192.168.13.0/24

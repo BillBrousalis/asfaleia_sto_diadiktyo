@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ site.brand }}{% endblock %}
+{% block body %}
+<main class="site">
+  <div class="site-card" id="site-card">
+    <p class="site-brand">{{ site.brand }}</p>
+    <h1>{{ site.heading }}</h1>
+    {% if site.body %}<p>{{ site.body }}</p>{% endif %}
+    {% if site.fields %}
+    <form id="site-form" autocomplete="off">
+      {% for label, type, name in site.fields %}
+      <label>{{ label }}<input type="{{ type }}" name="{{ name }}" autocomplete="off"></label>
+      {% endfor %}
+      <button type="submit" class="big">{{ site.button }}</button>
+    </form>
+    {% endif %}
+  </div>
+  <div id="outcome" hidden></div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+const form = document.getElementById('site-form');
+if (form) form.addEventListener('submit', ev => {
+  ev.preventDefault();
+  const typed = { user: (form.elements.user && form.elements.user.value.trim()) || '…' };
+  document.getElementById('site-card').hidden = true;
+  const box = document.getElementById('outcome');
+  box.hidden = false;
+  fetch('/api/event', { method: 'POST' }).then(r => r.json()).then(d => {
+    if (d.legit) {
+      box.innerHTML = '';
+      const card = document.createElement('div'); card.className = 'result ok';
+      const h = document.createElement('h2'); h.textContent = d.title;
+      const t = document.createElement('p'); t.textContent = d.text;
+      card.append(h, t); box.appendChild(card);
+    } else {
+      renderOutcome(box, d.outcome, typed);
+    }
+  });
+});
+</script>
+{% endblock %}

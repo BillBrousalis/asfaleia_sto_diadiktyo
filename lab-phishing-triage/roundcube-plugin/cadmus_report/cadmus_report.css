@@ -1,0 +1,30 @@
+/* toolbar icon (Elastic) */
+.toolbar a.cadmus-report:before { content: "\f071"; }
+.toolbar a.cadmus-report.disabled { opacity: .5; }
+/* dialog content */
+.cadmus { font-size: 16px; line-height: 1.5; }
+.cadmus .cadmus-verdict { font-weight: 700; font-size: 18px; margin: 0 0 6px; }
+.cadmus .cadmus-verdict.ok { color: #1b7f3b; } .cadmus .cadmus-verdict.warn { color: #a65f00; }
+.cadmus .cadmus-note { color: #566; font-size: 14px; }
+.cadmus .result { border-top: 6px solid #b3261e; padding: 8px 0 0; }
+.cadmus .result.warn { border-color: #a65f00; }
+.cadmus .result h2 { font-size: 18px; margin: 8px 0; }
+.cadmus .timeline { list-style: none; padding: 0; margin: 8px 0; }
+.cadmus .step { border-left: 4px solid #d5dbe1; padding: 4px 0 4px 10px; margin: 8px 0; }
+.cadmus .step.you { border-color: #1a5fb4; } .cadmus .step.atk { border-color: #b3261e; }
+.cadmus .step.loss { border-color: #b3261e; background: #fdeceb; }
+.cadmus .step .time { font-weight: 700; margin-right: 8px; }
+.cadmus .step .who { font-size: 12px; text-transform: uppercase; color: #566; }
+.cadmus .step p { margin: 2px 0 0; }
+.cadmus .loss-amount { font-size: 20px; font-weight: 800; color: #b3261e; margin: 0; }
+.cadmus .loss-label { margin: 0; color: #566; }
+.cadmus button.big { background: #1a5fb4; color: #fff; border: 0; border-radius: 6px; padding: 10px 16px; font-size: 16px; cursor: pointer; }
+.cadmus h3 { font-size: 17px; margin: 14px 0 4px; }
+
+.cadmus .cadmus-done { background: #e6f5ea; border: 2px solid #1b7f3b; border-radius: 8px; padding: 10px 14px; margin: 0 0 12px; }
+.cadmus .cadmus-done p { margin: 4px 0; }
+.cadmus .cadmus-done-title { font-size: 19px; font-weight: 800; color: #1b7f3b; }
+.cadmus .cadmus-flag { display: block; background: #10221a; color: #8dffb0; padding: 8px 10px; border-radius: 6px; font-size: 16px; margin-top: 6px; word-break: break-all; }
+
+#taskmenu a.cadmus-home { display: block; padding: .6rem .3rem; text-align: center; font-size: .75rem; color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.15); }
+#taskmenu a.cadmus-home:hover { background: rgba(255,255,255,.12); }

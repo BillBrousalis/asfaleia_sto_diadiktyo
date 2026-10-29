@@ -1,0 +1,9 @@
+myhostname = mail.meltemi-logistics.example
+mydomain = meltemi-logistics.example
+myorigin = $mydomain
+inet_interfaces = loopback-only
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+home_mailbox = Maildir/
+biff = no
+append_dot_mydomain = no
+readme_directory = no

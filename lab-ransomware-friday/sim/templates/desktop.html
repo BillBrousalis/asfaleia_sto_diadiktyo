@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Ο υπολογιστής του Θοδωρή{% endblock %}
+{% block bodyclass %}pc{% endblock %}
+{% block body %}
+<div id="bar" class="bar" hidden></div>
+<div id="toast" class="toast" hidden></div>
+<div id="note" class="note" hidden></div>
+<div id="win" class="note win-ok" hidden></div>
+<main id="app" class="app"></main>
+{% endblock %}
+{% block scripts %}<script src="/static/desktop.js"></script>{% endblock %}
