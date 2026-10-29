@@ -13,7 +13,8 @@
 ## Δομή
 
 ```
-topology.yml                  # vm1 (xubuntu) + vm2 (server) + router, δίκτυο 192.168.10.0/24
+topology.yml                  # vm1 (xubuntu, c3_r3_d15) + vm2 (server, c2_r2_d12) + router (standard.small), δίκτυο 192.168.10.0/24
+variables.yml                 # κενό ({}), όπως στο παράδειγμα btcmp-18
 provisioning/
   playbook.yml                # ένα playbook για και τα τρία labs
   requirements.yml            # role user-access
