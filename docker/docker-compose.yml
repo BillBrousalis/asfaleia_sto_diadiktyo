@@ -25,9 +25,9 @@ x-sites: &sites
   - "vault.passkeeper.example:192.168.13.20"
   - "breachcheck.example:192.168.13.20"
   - "pc.protefs-office.example:192.168.13.20"
-  - "phishing.cadmus-labs.example:192.168.13.20"
-  - "accounts.cadmus-labs.example:192.168.13.20"
-  - "ransomware.cadmus-labs.example:192.168.13.20"
+  - "phishing.labs.example:192.168.13.20"
+  - "accounts.labs.example:192.168.13.20"
+  - "ransomware.labs.example:192.168.13.20"
 
 services:
   vm2:

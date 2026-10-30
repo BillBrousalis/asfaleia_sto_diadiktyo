@@ -14,14 +14,14 @@
 
 ## Αρχιτεκτονική
 - Το lab τρέχει στο κοινό VM2 των τριών labs: μια εφαρμογή Flask στην τοπική θύρα 8092, πίσω από τον Apache της θύρας 80 (δρομολόγηση με βάση το όνομα).
-- Η εφαρμογή (`sim/app.py`) διαλέγει περιεχόμενο με βάση το Host: `ransomware.cadmus-labs.example` → αρχική οθόνη και πρόοδος, `pc.protefs-office.example` → ο υπολογιστής.
+- Η εφαρμογή (`sim/app.py`) διαλέγει περιεχόμενο με βάση το Host: `ransomware.labs.example` → αρχική οθόνη και πρόοδος, `pc.protefs-office.example` → ο υπολογιστής.
 
 ## Πρόσβαση
-Σελίδα επιλογής: `http://192.168.10.20` · αρχική οθόνη: `http://ransomware.cadmus-labs.example` · υπολογιστής: `http://pc.protefs-office.example`.
+Σελίδα επιλογής: `http://192.168.10.20` · αρχική οθόνη: `http://ransomware.labs.example` · υπολογιστής: `http://pc.protefs-office.example`.
 Τοπικά (Docker) και τα τρία labs τρέχουν μαζί από τον φάκελο `docker/` της ρίζας του repo: `./run.sh`, και ο παίκτης ανοίγει `http://localhost:3030`.
 
 ## Για τον εκπαιδευτή
 - Όλα είναι πλασματικά (`.example`). Το «ransomware» είναι προσομοίωση: δεν αγγίζει πραγματικά αρχεία και κανένα εξωτερικό αίτημα δεν γίνεται.
 - Η κατάσταση κρατιέται στη μνήμη. «Ξεκίνα από την αρχή» τη μηδενίζει.
-- Έλεγχος λογικής: `START_HOST=ransomware.cadmus-labs.example python3 tools/play.py http://127.0.0.1:<θύρα του Apache> ext|cloud_fast|cloud_slow|disk_only|nothing|plugged|dirty|spread`.
+- Έλεγχος λογικής: `START_HOST=ransomware.labs.example python3 tools/play.py http://127.0.0.1:<θύρα του Apache> ext|cloud_fast|cloud_slow|disk_only|nothing|plugged|dirty|spread`.
 - Δες τα `theory.md`, `Questions_Answers.md`, `Solution.md`.

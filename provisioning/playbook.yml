@@ -7,9 +7,9 @@
 #  VM1: Student machine (GUI + Firefox). Resolves every simulated name to VM2 through /etc/hosts.
 #  VM2: Lab server. Apache listens on :80 and routes by name (name-based virtual hosts):
 #        the IP address                      -> hub page that lists the three labs
-#        phishing.cadmus-labs.example        -> lab A start screen / progress, plus A's simulated websites
-#        accounts.cadmus-labs.example        -> lab B start screen / progress, plus B's simulated services
-#        ransomware.cadmus-labs.example      -> lab C start screen / progress, plus C's simulated computer
+#        phishing.labs.example        -> lab A start screen / progress, plus A's simulated websites
+#        accounts.labs.example        -> lab B start screen / progress, plus B's simulated services
+#        ransomware.labs.example      -> lab C start screen / progress, plus C's simulated computer
 #        mail.meltemi-logistics.example      -> Roundcube (lab A)
 #  The player opens http://<VM2 IP>/ in Firefox and picks the lab.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -63,8 +63,8 @@
     lab_a_maildir: "/var/mail/vhosts/meltemi-logistics.example/eleni.markou"
     sim_hosts: "{{ lookup('file', '../lab-phishing-triage/sim/hosts.txt').splitlines() }}"
     flask_labs:
-      - { name: lab-leaked-account,    src: lab-leaked-account,    port: 8091, start_host: accounts.cadmus-labs.example,   vhost: 003-accounts,   title: "Lab B" }
-      - { name: lab-ransomware-friday, src: lab-ransomware-friday, port: 8092, start_host: ransomware.cadmus-labs.example, vhost: 004-ransomware, title: "Lab C" }
+      - { name: lab-leaked-account,    src: lab-leaked-account,    port: 8091, start_host: accounts.labs.example,   vhost: 003-accounts,   title: "Lab B" }
+      - { name: lab-ransomware-friday, src: lab-ransomware-friday, port: 8092, start_host: ransomware.labs.example, vhost: 004-ransomware, title: "Lab C" }
     lab_a_manifest: "{{ lookup('file', '../lab-phishing-triage/init/mail-manifest.json') | from_json }}"
 
   tasks:
@@ -363,6 +363,7 @@
         - templates/site.html
         - static/style.css
         - static/outcome.js
+        - static/copy.js
         - static/status.js
 
     - name: "[sim] Deploy systemd service"
@@ -401,7 +402,7 @@
         mode: '0644'
         content: |
           <VirtualHost *:80>
-              ServerName phishing.cadmus-labs.example
+              ServerName phishing.labs.example
               {% for h in sim_hosts %}
               ServerAlias {{ h }}
               {% endfor %}

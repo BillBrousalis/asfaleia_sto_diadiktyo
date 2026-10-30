@@ -12,7 +12,7 @@ const bar = document.getElementById('bar'), sms = document.getElementById('sms')
 async function refreshBar() {
   const b = await get('/api/bar');
   bar.hidden = false; bar.className = 'bar'; bar.innerHTML = '';
-  if (b.done) { bar.classList.add('done'); bar.appendChild(mk('span', '', 'Συγχαρητήρια! Ολοκλήρωσες με επιτυχία το lab. Κωδικός επιβεβαίωσης: ' + b.flag + ' · ')); }
+  if (b.done) { bar.classList.add('done'); bar.appendChild(mk('span', '', 'Συγχαρητήρια! Ολοκλήρωσες με επιτυχία το lab. Κωδικός επιβεβαίωσης: ' + b.flag + ' ')); bar.appendChild(copyButton(() => b.flag, 'Αντιγραφή κωδικού')); bar.append(' · '); }
   const home = mk('a', '', 'Αρχική οθόνη και βήματα'); home.href = '/home'; home.target = '_blank';
   const prog = mk('a', '', 'Πρόοδος'); prog.href = '/progress'; prog.target = '_blank';
   bar.appendChild(home); bar.append(' · '); bar.appendChild(prog);
@@ -22,6 +22,7 @@ function phone(code) {
   sms.hidden = false; sms.innerHTML = '';
   sms.appendChild(mk('small', '', 'Το κινητό σου · SMS'));
   sms.appendChild(mk('div', '', 'Ο κωδικός επιβεβαίωσης είναι ' + code + '. Μην τον δώσεις σε κανέναν.'));
+  sms.appendChild(copyButton(() => code, 'Αντιγραφή κωδικού'));
   const x = mk('button', 'x', '✕'); x.title = 'Κλείσιμο'; x.onclick = () => { sms.hidden = true; }; sms.appendChild(x);
 }
 
@@ -182,7 +183,7 @@ async function showVault() {
     const a = mk('a', 'small', r.url); a.href = r.url; a.target = '_blank'; left.appendChild(a); row.appendChild(left);
     const mid = mk('div'); const code = mk('span', 'pw', '••••••••••'); const show = mk('button', 'small-btn', 'Εμφάνιση'); let v = false;
     show.addEventListener('click', () => { v = !v; code.textContent = v ? r.pw : '••••••••••'; show.textContent = v ? 'Απόκρυψη' : 'Εμφάνιση'; });
-    mid.append(code, ' ', show); row.appendChild(mid);
+    mid.append(code, ' ', show, copyButton(() => r.pw)); row.appendChild(mid);
     const tags = mk('div');
     if (r.reused) tags.appendChild(mk('span', 'pill bad', 'Ίδιος κωδικός σε άλλον λογαριασμό'));
     if (r.leaked) tags.appendChild(mk('span', 'pill bad', 'Διέρρευσε'));
@@ -193,7 +194,7 @@ async function showVault() {
   g.appendChild(mk('p', 'small', 'Δημιούργησε έναν τυχαίο, μακρύ κωδικό και αντίγραψέ τον στη φόρμα αλλαγής κωδικού του λογαριασμού.'));
   const out = mk('input'); out.type = 'text'; out.readOnly = true; out.placeholder = 'Πάτα «Δημιουργία»';
   const b = mk('button', 'big', 'Δημιουργία'); b.addEventListener('click', async () => { out.value = (await post('/api/generate')).pw; out.select(); });
-  const c = mk('button', 'small-btn', 'Αντιγραφή'); c.addEventListener('click', () => { out.select(); document.execCommand('copy'); });
+  const c = copyButton(() => out.value);
   g.append(out, document.createElement('br'), b, ' ', c);
   const r = mk('button', 'link', 'Ανανέωση λίστας'); r.addEventListener('click', showVault); $app.appendChild(r);
 }

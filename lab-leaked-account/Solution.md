@@ -42,14 +42,14 @@
 
 | Flag | Θέμα | Απάντηση |
 |---|---|---|
-| F1 | Ολοκλήρωση | `CADMUS{0f2c952afe849ec22051abb9fed9af3d}` |
+| F1 | Ολοκλήρωση | `FLAG{0f2c952afe849ec22051abb9fed9af3d}` |
 | F2 | Πηγή της διαρροής | `ShopStar` |
 | F3 | Λογαριασμοί με τον κωδικό που διέρρευσε | `2` |
 | F4 | Όνομα που αποκαλύπτεται δημόσια | `Luna` |
 | F5 | Χώρα του απατεώνα | `Βραζιλία` |
 
 ### Εργαλείο εκπαιδευτή
-`START_HOST=accounts.cadmus-labs.example python3 tools/play.py http://127.0.0.1:<θύρα του Apache> perfect|naive|order|session` παίζει σενάρια μέσω του API και ελέγχει τους κανόνες (χρησιμοποιεί το `/api/report` του server, που δεν είναι διαθέσιμο από το UI).
+`START_HOST=accounts.labs.example python3 tools/play.py http://127.0.0.1:<θύρα του Apache> perfect|naive|order|session` παίζει σενάρια μέσω του API και ελέγχει τους κανόνες (χρησιμοποιεί το `/api/report` του server, που δεν είναι διαθέσιμο από το UI).
 
 ### Συζήτηση για την τάξη
 

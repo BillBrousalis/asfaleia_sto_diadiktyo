@@ -14,7 +14,7 @@ import threading
 from flask import Flask, abort, jsonify, render_template, request
 
 ORDER = ["email", "shop", "social", "bank"]                 # the attacker's order inside a round
-FLAG = "CADMUS{0f2c952afe849ec22051abb9fed9af3d}"
+FLAG = "FLAG{0f2c952afe849ec22051abb9fed9af3d}"
 LEAK = "Eleni1985"
 MY_MAIL = "eleni.markou@aigaio-mail.example"
 HOSTS = {

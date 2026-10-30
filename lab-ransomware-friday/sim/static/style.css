@@ -91,3 +91,6 @@ textarea{display:block;width:100%;font:inherit;font-size:16px;padding:10px;borde
 .btnrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px}
 .btnrow a.big{margin-right:0}
 a.btn2{display:inline-block;text-decoration:none;border:2px solid var(--blue);color:var(--blue);background:#fff;border-radius:8px;padding:12px 18px;font-size:18px}
+
+.copybtn{background:#fff;border:1px solid #c5ccd3;border-radius:6px;padding:4px 10px;font:inherit;font-size:14px;margin-left:8px;cursor:pointer;color:#1d2630}
+.copybtn:hover{background:#eef2f6}code.flag + .copybtn{display:block;margin:8px 0 0}

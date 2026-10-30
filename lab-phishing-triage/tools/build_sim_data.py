@@ -10,7 +10,7 @@ from pathlib import Path
 from generate_emails import messages
 
 OUT = Path(__file__).resolve().parent.parent / "sim" / "scenarios.json"
-FLAG = "CADMUS{bd638a3aab81235a49f3d3b000d6e6eb}"
+FLAG = "FLAG{bd638a3aab81235a49f3d3b000d6e6eb}"
 
 # kind: you = what the player does · atk = what the attacker does · loss = the damage
 def S(t, kind, text):

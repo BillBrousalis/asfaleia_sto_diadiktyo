@@ -5,7 +5,7 @@ import json, os, sys, time, urllib.request, http.cookiejar
 
 BASE = sys.argv[1].rstrip("/")
 HOST = {"email": "mail.aigaio-mail.example", "shop": "shop.kyklades-store.example", "social": "www.sinomilia.example",
-        "bank": "ebanking.elara-bank.example", "vault": "vault.passkeeper.example", "start": os.environ.get("START_HOST", "accounts.cadmus-labs.example")}
+        "bank": "ebanking.elara-bank.example", "vault": "vault.passkeeper.example", "start": os.environ.get("START_HOST", "accounts.labs.example")}
 jar = {k: http.cookiejar.CookieJar() for k in HOST}
 
 def call(svc, path, body=None):
@@ -87,7 +87,7 @@ if sc == "perfect":                      # secure everything, then test the defe
     check("not done before a round is requested", not progress()["done"])
     attack()
     p = progress()
-    check("done and flag", p["done"] and p.get("flag") == "CADMUS{0f2c952afe849ec22051abb9fed9af3d}")
+    check("done and flag", p["done"] and p.get("flag") == "FLAG{0f2c952afe849ec22051abb9fed9af3d}")
     check("all four attacks were blocked", all(e["ok"] is False for e in p["events"]) and len(p["events"]) == 4)
 
 elif sc == "naive":                      # do nothing, let the attacker win, then recover

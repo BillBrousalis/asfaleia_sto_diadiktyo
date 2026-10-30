@@ -12,8 +12,8 @@ class cadmus_report extends rcube_plugin
     private const STATE_API = 'http://127.0.0.1:8080/api/plugin_state';
     private const RESTORE_DONE = 'http://127.0.0.1:8080/api/restore_done';
     // the start screen and progress page of this lab (one name-based vhost on the shared lab server)
-    private const HOME = 'http://phishing.cadmus-labs.example/home';
-    private const PROGRESS = 'http://phishing.cadmus-labs.example/progress';
+    private const HOME = 'http://phishing.labs.example/home';
+    private const PROGRESS = 'http://phishing.labs.example/progress';
     private $lab_state = null;
     private const FOLDER = 'Αναφορές';
 

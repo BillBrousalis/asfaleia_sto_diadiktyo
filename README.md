@@ -4,9 +4,9 @@
 
 | Lab | Άσκηση | Αρχική οθόνη |
 |---|---|---|
-| A | Αναγνώριση spam και phishing emails | `http://phishing.cadmus-labs.example` |
-| B | Ασφάλιση λογαριασμών μετά από διαρροή κωδικού | `http://accounts.cadmus-labs.example` |
-| C | Προστασία και ανάκτηση αρχείων από ransomware | `http://ransomware.cadmus-labs.example` |
+| A | Αναγνώριση spam και phishing emails | `http://phishing.labs.example` |
+| B | Ασφάλιση λογαριασμών μετά από διαρροή κωδικού | `http://accounts.labs.example` |
+| C | Προστασία και ανάκτηση αρχείων από ransomware | `http://ransomware.labs.example` |
 
 Η διεύθυνση IP του VM2 (`http://192.168.10.20`) δείχνει μια σελίδα με τα τρία labs και κουμπιά προς τις αρχικές οθόνες τους.
 
@@ -24,6 +24,8 @@ lab-leaked-account/           # Lab B: theory.md · Questions_Answers.md · Solu
 lab-ransomware-friday/        # Lab C: theory.md · Questions_Answers.md · Solution.md · sim/ · tools/
 docker/                       # τοπική εκδοχή (Dockerfile, docker-compose.yml) για δοκιμή χωρίς VM
 tools/check_hosts.py          # έλεγχος ότι τα ονόματα είναι μοναδικά και ίδια σε όλα τα αρχεία
+cadmus_training_definition.json  # training definition για την πλατφόρμα (παράγεται από tools/build_training_definition.py)
+example_training_def.json     # το παράδειγμα της πλατφόρμας (μορφή αναφοράς)
 run.sh  stop.sh               # τοπικό τρέξιμο με Docker
 ```
 
@@ -34,9 +36,9 @@ run.sh  stop.sh               # τοπικό τρέξιμο με Docker
 |---|---|
 | η διεύθυνση IP (και ό,τι άγνωστο) | σελίδα επιλογής (`hub/`) |
 | `mail.meltemi-logistics.example` | Roundcube (Lab A) |
-| `phishing.cadmus-labs.example` + 11 ψεύτικα sites | Flask του A, θύρα 8080 |
-| `accounts.cadmus-labs.example` + 6 υπηρεσίες | Flask του B, θύρα 8091 |
-| `ransomware.cadmus-labs.example` + `pc.protefs-office.example` | Flask του C, θύρα 8092 |
+| `phishing.labs.example` + 11 ψεύτικα sites | Flask του A, θύρα 8080 |
+| `accounts.labs.example` + 6 υπηρεσίες | Flask του B, θύρα 8091 |
+| `ransomware.labs.example` + `pc.protefs-office.example` | Flask του C, θύρα 8092 |
 
 Το VM1 λύνει και τα 22 ονόματα προς το VM2 μέσω `/etc/hosts` (το ορίζει το playbook). Κάθε lab κρατά τη δική του κατάσταση, οπότε οι παίκτες δεν επηρεάζουν τα άλλα labs.
 Τα ονόματα πρέπει να είναι μοναδικά σε όλα τα labs: για αυτό το κατάστημα του Lab B είναι στο `shop.kyklades-store.example` (το `www.kykladiko-shop.example` ανήκει στο Lab A).
@@ -55,4 +57,4 @@ run.sh  stop.sh               # τοπικό τρέξιμο με Docker
 ## Για τον εκπαιδευτή
 - Όλα τα ονόματα είναι πλασματικά (`.example`). Κανένα εξωτερικό αίτημα.
 - Εργαλεία ελέγχου (δεν αναπτύσσονται στο VM): `lab-*/tools/`. Τα Lab B και C τρέχουν με `START_HOST=<αρχική οθόνη> python3 tools/play.py http://127.0.0.1:8110 <σενάριο>`, το Lab A με `python3 tools/verify_key.py`.
-- Κάθε lab έχει flag ολοκλήρωσης (`CADMUS{…}`) στο `Questions_Answers.md` και στο `Solution.md` του.
+- Κάθε lab έχει flag ολοκλήρωσης (`FLAG{…}`) στο `Questions_Answers.md` και στο `Solution.md` του.

@@ -54,3 +54,6 @@ a.btn2{display:inline-block;text-decoration:none;border:2px solid var(--blue);co
 .restart{border:2px solid var(--bad);background:#fdeceb}.restart h2{color:var(--bad);margin-top:0}
 button.btn2{border:2px solid var(--blue);color:var(--blue);background:#fff;border-radius:8px;padding:10px 16px;font-size:17px;margin:4px 0 8px}
 .tips{padding-left:22px}.tips li{margin:10px 0}
+
+.copybtn{background:#fff;border:1px solid #c5ccd3;border-radius:6px;padding:4px 10px;font:inherit;font-size:14px;margin-left:8px;cursor:pointer;color:#1d2630}
+.copybtn:hover{background:#eef2f6}code.flag + .copybtn{display:block;margin:8px 0 0}

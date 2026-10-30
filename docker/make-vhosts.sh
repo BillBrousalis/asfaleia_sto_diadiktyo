@@ -31,8 +31,8 @@ proxy_vhost() {   # file, port, start host, hosts file
     } > "$SITES/$file"
 }
 
-proxy_vhost 002-phishing.conf   8080 phishing.cadmus-labs.example   /opt/lab-phishing/hosts.txt
-proxy_vhost 003-accounts.conf   8091 accounts.cadmus-labs.example   /opt/lab-leaked-account/hosts.txt
-proxy_vhost 004-ransomware.conf 8092 ransomware.cadmus-labs.example /opt/lab-ransomware-friday/hosts.txt
+proxy_vhost 002-phishing.conf   8080 phishing.labs.example   /opt/lab-phishing/hosts.txt
+proxy_vhost 003-accounts.conf   8091 accounts.labs.example   /opt/lab-leaked-account/hosts.txt
+proxy_vhost 004-ransomware.conf 8092 ransomware.labs.example /opt/lab-ransomware-friday/hosts.txt
 
 a2ensite 000-hub 001-mail 002-phishing 003-accounts 004-ransomware

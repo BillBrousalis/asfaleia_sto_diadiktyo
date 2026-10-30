@@ -54,3 +54,6 @@ a.big{display:inline-block;text-decoration:none}
 .btnrow a.big{margin-right:0}
 a.btn2{display:inline-block;text-decoration:none;border:2px solid var(--blue);color:var(--blue);background:#fff;border-radius:8px;padding:12px 18px;font-size:18px}
 .tile.partial{border-top-color:var(--warn)}.banner{background:#fff0d6;border:2px solid var(--warn);border-radius:10px;padding:12px 16px;margin:12px 0;font-weight:600}
+
+.copybtn{background:#fff;border:1px solid #c5ccd3;border-radius:6px;padding:4px 10px;font:inherit;font-size:14px;margin-left:8px;cursor:pointer;color:#1d2630}
+.copybtn:hover{background:#eef2f6}code.flag + .copybtn{display:block;margin:8px 0 0}

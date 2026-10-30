@@ -5,7 +5,7 @@ Scenarios: ext (offline disk) | mistake | plugged_restore | hints | cloud_fast |
 import json, os, sys, urllib.request
 
 BASE = sys.argv[1].rstrip("/")
-H = {"pc": "pc.protefs-office.example", "start": os.environ.get("START_HOST", "ransomware.cadmus-labs.example")}
+H = {"pc": "pc.protefs-office.example", "start": os.environ.get("START_HOST", "ransomware.labs.example")}
 OK = True
 
 def call(path, body=None, host="pc"):
@@ -68,7 +68,7 @@ if sc == "ext":
     r = call("/api/restore", {"src": "ext"}); check("restore from ext", r.get("ok"))
     check("not done yet: files not verified", "Έλεγχος αρχείων" in (finish()["open"] or []))
     r = call("/api/check", {"loc": "pc"}); check("one-click check reports 9 of 9", r["good"] == 9 and r["total"] == 9)
-    p = finish(); check("completed with flag", p["done"] and p.get("flag", "").startswith("CADMUS{"))
+    p = finish(); check("completed with flag", p["done"] and p.get("flag", "").startswith("FLAG{"))
     check("no spread happened", not any("άλλους υπολογιστές" in t for t in events()))
 
 elif sc == "cloud_fast":

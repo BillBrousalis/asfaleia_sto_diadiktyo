@@ -13,7 +13,7 @@ const bar = document.getElementById('bar');
 async function refreshBar() {
   const b = await get('/api/bar');
   bar.hidden = false; bar.className = 'bar'; bar.innerHTML = '';
-  if (b.done) { bar.classList.add('done'); bar.appendChild(mk('span', '', 'Συγχαρητήρια! Ολοκλήρωσες με επιτυχία το lab. Κωδικός επιβεβαίωσης: ' + b.flag + ' · ')); }
+  if (b.done) { bar.classList.add('done'); bar.appendChild(mk('span', '', 'Συγχαρητήρια! Ολοκλήρωσες με επιτυχία το lab. Κωδικός επιβεβαίωσης: ' + b.flag + ' ')); bar.appendChild(copyButton(() => b.flag, 'Αντιγραφή κωδικού')); bar.append(' · '); }
   const home = mk('a', '', 'Αρχική οθόνη και βήματα'); home.href = '/home'; home.target = '_blank';
   const prog = mk('a', '', 'Πρόοδος'); prog.href = '/progress'; prog.target = '_blank';
   bar.appendChild(home); bar.append(' · '); bar.appendChild(prog);
@@ -50,6 +50,7 @@ function showWin() {
   i.appendChild(mk('p', '', 'Ανέκτησες τα αρχεία σου χωρίς να πληρώσεις, ο υπολογιστής είναι καθαρός και ενημερωμένος, και ενημέρωσες όσους έπρεπε.'));
   i.appendChild(mk('p', '', 'Κωδικός επιβεβαίωσης για την πλατφόρμα:'));
   i.appendChild(mk('code', '', ST.flag));
+  i.appendChild(copyButton(() => ST.flag, 'Αντιγραφή κωδικού'));
   const c = mk('button', 'small-btn', 'Κλείσιμο'); c.onclick = () => { WIN_CLOSED = true; showWin(); }; i.appendChild(c);
 }
 

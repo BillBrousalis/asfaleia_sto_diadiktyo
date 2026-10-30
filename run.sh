@@ -20,9 +20,9 @@ cat <<'EOT'
    where you pick the lab)
 
   The three labs:
-    http://phishing.cadmus-labs.example     (inside that Firefox)
-    http://accounts.cadmus-labs.example
-    http://ransomware.cadmus-labs.example
+    http://phishing.labs.example     (inside that Firefox)
+    http://accounts.labs.example
+    http://ransomware.labs.example
 
   Direct access to the server (no simulated names): http://localhost:8110
 ================================================

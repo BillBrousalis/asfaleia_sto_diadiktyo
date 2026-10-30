@@ -12,7 +12,7 @@ import threading
 
 from flask import Flask, abort, jsonify, render_template, request
 
-FLAG = "CADMUS{2146a0e84c306b804380eebd0cbb2fe7}"
+FLAG = "FLAG{2146a0e84c306b804380eebd0cbb2fe7}"
 HOSTS = {
     "pc.protefs-office.example": "pc",
 }
@@ -305,7 +305,7 @@ def api_state():
             "disk_backup": S["disk"] is not None, "cloud_on": S["cloud"]["on"],
             "updates": [{"id": u[0], "name": u[1], "done": S["updates"][u[0]]} for u in UPDATES],
             "sent": S["sent"], "paid": S["paid"], "replied": S["replied"], "rep_it": S["rep_it"], "rep_auth": S["rep_auth"],
-            "ok_files": sum(v == "ok" for v in S["local"].values()), "total": len(FILES), "locations": locs, "folders": FOLDERS, "ransom": S["phase"] == "incident" and not S["paid"],
+            "ok_files": sum(v == "ok" for v in S["local"].values()), "total": len(FILES), "locations": locs, "folders": FOLDERS, "ransom": S["phase"] == "incident" and S["infected"] and not S["paid"] and not S["done"],
             "contact": CONTACT, "mistake": S["pending_mistake"] is not None, "toast": S["toast"], "done": S["done"], "flag": FLAG if S["done"] else None})
 
 

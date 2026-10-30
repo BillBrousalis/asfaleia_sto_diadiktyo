@@ -1,3 +1,3 @@
-phishing.cadmus-labs.example
-accounts.cadmus-labs.example
-ransomware.cadmus-labs.example
+phishing.labs.example
+accounts.labs.example
+ransomware.labs.example

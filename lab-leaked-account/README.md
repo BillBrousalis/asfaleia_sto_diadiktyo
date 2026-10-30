@@ -33,11 +33,11 @@ leaked-account/
 ```
 
 ## Στο κοινό μηχάνημα
-Το lab τρέχει στο ίδιο VM2 με τα Lab A και C: μια εφαρμογή Flask στην τοπική θύρα 8091, πίσω από τον Apache της θύρας 80. Ο Apache δρομολογεί με βάση το όνομα: το `accounts.cadmus-labs.example` είναι η αρχική οθόνη και η σελίδα προόδου, και τα `mail.aigaio-mail.example`, `shop.kyklades-store.example`, `www.sinomilia.example`, `ebanking.elara-bank.example`, `vault.passkeeper.example`, `breachcheck.example` είναι οι προσομοιωμένες υπηρεσίες.
-Ο παίκτης ανοίγει τη σελίδα επιλογής `http://192.168.10.20` και διαλέγει την άσκηση, ή πηγαίνει κατευθείαν στο `http://accounts.cadmus-labs.example`.
+Το lab τρέχει στο ίδιο VM2 με τα Lab A και C: μια εφαρμογή Flask στην τοπική θύρα 8091, πίσω από τον Apache της θύρας 80. Ο Apache δρομολογεί με βάση το όνομα: το `accounts.labs.example` είναι η αρχική οθόνη και η σελίδα προόδου, και τα `mail.aigaio-mail.example`, `shop.kyklades-store.example`, `www.sinomilia.example`, `ebanking.elara-bank.example`, `vault.passkeeper.example`, `breachcheck.example` είναι οι προσομοιωμένες υπηρεσίες.
+Ο παίκτης ανοίγει τη σελίδα επιλογής `http://192.168.10.20` και διαλέγει την άσκηση, ή πηγαίνει κατευθείαν στο `http://accounts.labs.example`.
 Τοπικά (Docker) και τα τρία labs τρέχουν μαζί από τον φάκελο `docker/` της ρίζας του repo: `./run.sh`, και ο παίκτης ανοίγει `http://localhost:3030`.
 
 ## Για τον εκπαιδευτή
 - Όλα είναι πλασματικά (`.example`). Κανένα εξωτερικό αίτημα.
 - Η κατάσταση κρατιέται στη μνήμη. Το «Ξεκίνα από την αρχή» της σελίδας προόδου την μηδενίζει.
-- Έλεγχος λογικής: `START_HOST=accounts.cadmus-labs.example python3 tools/play.py http://127.0.0.1:<θύρα του Apache> perfect|session|order|naive`.
+- Έλεγχος λογικής: `START_HOST=accounts.labs.example python3 tools/play.py http://127.0.0.1:<θύρα του Apache> perfect|session|order|naive`.
